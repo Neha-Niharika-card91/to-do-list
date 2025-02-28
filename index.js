@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  let key = "";
   let value = "";
   let tasks = [];
   console.log("Loaded");
+  //localStorage.clear();
   let formID = document.getElementById("formID");
   let inputValue = document.getElementById("inputValue");
   let listElement = document.getElementById("listElement");
@@ -13,30 +13,32 @@ document.addEventListener("DOMContentLoaded", function () {
   handleStoredData();
   function handleSubmit(event) {
     event.preventDefault();
-    for (let j = 0; j < tasks.length; j++) {
-      localStorage.setItem(tasks[j].key, tasks[j].value);
-      //console.log("Key ");
-      //console.log("Value ");
-      console.log(localStorage.length);
-      inputValue.value = "";
-      handleStoredData();
-    }
+    localStorage.setItem("Tasks", JSON.stringify(tasks));
+    inputValue.value = "";
+    handleStoredData();
   }
   function handleChange(event) {
     value = event.target.value;
-    key = event.target.id + value;
+    if (localStorage.length === 0) {
+      tasks.push({ value });
+    } else {
+      tasks = JSON.parse(localStorage.getItem("Tasks"));
+      tasks.push({ value });
+    }
 
-    tasks.push({ key, value });
     //console.log(tasks);
   }
   function handleStoredData() {
     listElement.textContent = "";
-    for (let j = 0; j < localStorage.length; j++) {
-      element = document.createElement("li");
-      let v = localStorage.key(j);
-      element.textContent = localStorage.getItem(v);
-      console.log(element);
-      listElement.appendChild(element);
+    let list = JSON.parse(localStorage.getItem("Tasks"));
+    if (localStorage.length > 0) {
+      console.log(list);
+      for (j = 0; j < list.length; j++) {
+        console.log(`${list[j]} has value ${list[j].value}`);
+        element = document.createElement("li");
+        element.textContent = list[j].value;
+        listElement.appendChild(element);
+      }
     }
   }
 });
