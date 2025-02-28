@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   let value = "";
   let tasks = [];
-  console.log("Loaded");
   //localStorage.clear();
   let formID = document.getElementById("formID");
   let inputValue = document.getElementById("inputValue");
@@ -10,29 +9,29 @@ document.addEventListener("DOMContentLoaded", function () {
   formID.addEventListener("submit", handleSubmit);
   formID.addEventListener("change", handleChange);
   let element;
-  handleStoredData();
-  function handleSubmit(event) {
+  handleStoredData(); //load stored data
+  const handleSubmit = (event) => {
     event.preventDefault();
     localStorage.setItem("Tasks", JSON.stringify(tasks));
     inputValue.value = "";
-    handleStoredData();
-  }
-  function handleChange(event) {
+    handleStoredData(); //load data entered on submit
+  };
+  const handleChange = (event) => {
     value = event.target.value;
-    if (localStorage.length === 0) {
+    if (value !== "" && localStorage.length === 0) {
       tasks.push({ value });
-    } else {
+    }
+    if (localStorage.length != 0) {
       tasks = JSON.parse(localStorage.getItem("Tasks"));
       tasks.push({ value });
     }
 
     //console.log(tasks);
-  }
-  function handleStoredData() {
+  };
+  const handleStoredData = () => {
     listElement.textContent = "";
     let list = JSON.parse(localStorage.getItem("Tasks"));
     if (localStorage.length > 0) {
-      console.log(list);
       for (j = 0; j < list.length; j++) {
         console.log(`${list[j]} has value ${list[j].value}`);
         element = document.createElement("li");
@@ -40,5 +39,5 @@ document.addEventListener("DOMContentLoaded", function () {
         listElement.appendChild(element);
       }
     }
-  }
+  };
 });
