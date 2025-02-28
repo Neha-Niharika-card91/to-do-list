@@ -6,18 +6,27 @@ document.addEventListener("DOMContentLoaded", function () {
   let inputValue = document.getElementById("inputValue");
   let listElement = document.getElementById("listElement");
 
-  formID.addEventListener("submit", handleSubmit);
-  formID.addEventListener("change", handleChange);
   let element;
-  handleStoredData(); //load stored data
-  const handleSubmit = (event) => {
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  const handleSubmit = async (event) => {
     event.preventDefault();
     localStorage.setItem("Tasks", JSON.stringify(tasks));
+
+    let button = document.getElementById("button");
+    button.disabled = true;
+    button.innerText = "...Loading";
+    await delay(2000);
+    button.disabled = false;
+    button.innerText = "Submit";
     inputValue.value = "";
+
     handleStoredData(); //load data entered on submit
   };
   const handleChange = (event) => {
     value = event.target.value;
+
     if (value !== "" && localStorage.length === 0) {
       tasks.push({ value });
     }
@@ -25,8 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
       tasks = JSON.parse(localStorage.getItem("Tasks"));
       tasks.push({ value });
     }
-
-    //console.log(tasks);
   };
   const handleStoredData = () => {
     listElement.textContent = "";
@@ -40,4 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   };
+
+  formID.addEventListener("submit", handleSubmit);
+  formID.addEventListener("change", handleChange);
+  handleStoredData();
 });
