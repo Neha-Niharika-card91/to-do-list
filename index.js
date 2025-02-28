@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let formID = document.getElementById("formID");
   let inputValue = document.getElementById("inputValue");
   let listElement = document.getElementById("listElement");
+  let button = document.getElementById("button");
+  button.disabled = true;
 
   let element;
   function delay(ms) {
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   const handleChange = (event) => {
     value = event.target.value;
-
+    button.disabled = false;
     if (value !== "" && localStorage.length === 0) {
       tasks.push({ value });
     }
